@@ -20,6 +20,20 @@
 */
 
 module.exports = function(bp) {
+  bp.middlewares.load()
+
+  bp.hear({
+    type: 'message',
+    platform: 'facebook',
+    text: /\b(hello)|(hi)|(hey)|(yo)|(test)|(hola)|(holla)\b/i
+  }, (event, next) => {
+    const {id, first_name, last_name} = event.user
+    const typing = {typing: '250ms'}
+
+    bp.messenger.sendText(id, `Hello ${first_name} ${last_name}`, typing)
+
+  })
+
   // // Listens for a first message (this is a Regex)
   // // GET_STARTED is the first message you get on Facebook Messenger
   // bp.hear(/GET_STARTED|hello|hi|test|hey|holla/i, (event, next) => {
@@ -37,17 +51,40 @@ module.exports = function(bp) {
   //   })
   // })
 
-  bp.middlewares.load()
-
   // bp.hear({
   //     type: 'message',
   //     text: /.+/
   //   }, event => {
   //     bp.messenger.sendText(event.user.id, event.text + " is no good")
   // })
-  bp.hear(/GET_STARTED|hello|hi|test|hey|yo|sup|good|holla|hola|buenos|buenas/i, (event, next) => {
-    const first_name = event.user.first_name
+  // bp.hear(/hello|hi|test|hey|yo|sup|good|holla|hola|buenos|buenas/i, (event, next) => {
+  //   const first_name = event.user.first_name
 
-    bp.messenger.sendText(event.user.id, `Hello ${first_name}`, {typing: true})
-  })
+    // bp.messenger.sendText(event.user.id, `Hello ${first_name}`, {typing: true})
+  //   bp.messenger.sendText(event.user.id, '#welcome')
+  // })
+
+  // bp.hear({
+  //   type: 'message',
+  //   text: /hi|hello|hey|greeting|yo|good|bueno|buena|guten|sup|what's up/i
+  // }, (event) => {
+  //   const first_name = event.user.first_name;
+  //   bp.messenger.sendText(event.user.id, `Hello ${first_name} ;)`, {typing: true});
+  // });
+  //
+  // bp.hear({
+  //   type: 'message',
+  //   text: /fuck/i
+  // }, (event) => {
+  //   bp.messenger.sendText(event.user.id, "hello world? the world is a cruel place :(");
+  // });
+  //
+  // bp.hear({
+  //   type: 'message',
+  //   text: /weather/i
+  // }, (event) => {
+  //   bp.messenger.sendText(event.user.id, "the weather is pretty nice by you");
+  // })
+
+
 }

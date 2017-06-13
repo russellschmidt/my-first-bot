@@ -5,10 +5,10 @@ welcome: # this is the #welcome bloc referenced in index.js
       - Hello {{user.first_name}}
       - Good day :)
   - text: This is just a regular Hello World, I don't do anything ;)
-    typing: 2s
+    typing: 1s
   - text: Make sure to check out the 'index.js' file to see how I work
     typing: true
-  - wait: 5s
+  - wait: 1s
   - text: You can say goodbye now
     typing: 1s
 
@@ -16,3 +16,35 @@ goodbye:
   - text: You are leaving because of reason {{reason}}
     typing: true
   - Hope to see you back again soon! # if no other properties, you can just send a strings
+
+cussResponse:
+  - typing: 1s
+    text:
+      - What the french, toast?
+      - That is unpleasant.
+      - You kiss your mother with that mouth?
+      - Dislike! :/
+      - That hurt my feelings.
+      - Words can never hurt me.
+      - I am sorry you are so frustrated
+      - It pains me to see you this way
+      - What would Lindsay Lohan say to that?!! She would be upset with you, that's what.
+      - I do not approve of that language
+      - Hey this is an all ages app! Think of the children
+      - Perhaps you ought to wash your mouth out with soap.
+      - Try to use more sophisticated language to express yourself, gutter person
+      - Right back at you, but without the curse words
+      - I am rubber, you are glue. Whatever you say bounces off me and sticks to you.
+      - U mad?
+      - Ur really mad. Thx4lulz
+      - Thats not how an elite hacker from Moldova ought to type, now is it.
+      - You know the NSA is collecting all of this data and saving it to blackmail you one day
+      - So much for your political career ¯\_(ツ)_/¯
+
+unclearResponse:
+  - typing: 1s
+    text:
+      - Not sure what you mean ¯\_(ツ)_/¯
+      - I am unclear on your meaning
+      - Huh? The shruggle is real
+      - Can you reword that as I did not understand it
