@@ -1,23 +1,5 @@
-/*
-  CONGRATULATIONS on creating your first Botpress bot!
-
-  This is the programmatic entry point of your bot.
-  Your bot's logic resides here.
-
-  Here's the next steps for you:
-  1. Read this file to understand how this simple bot works
-  2. Read the `content.yml` file to understand how messages are sent
-  3. Install a connector module (Facebook Messenger and/or Slack)
-  4. Customize your bot!
-
-  Happy bot building!
-
-  The Botpress Team
-  ----
-  Getting Started (Youtube Video): https://www.youtube.com/watch?v=HTpUmDz9kRY
-  Documentation: https://docs.botpress.io/
-  Our Slack Community: https://slack.botpress.io
-*/
+const Promise = require('bluebird')
+const greetingTemplate = require('./templates/greetingTemplate')
 
 module.exports = function(bp) {
   bp.middlewares.load()
@@ -28,63 +10,18 @@ module.exports = function(bp) {
     text: /\b(hello)|(hi)|(hey)|(yo)|(test)|(hola)|(holla)\b/i
   }, (event, next) => {
     const {id, first_name, last_name} = event.user
-    const typing = {typing: '250ms'}
 
-    bp.messenger.sendText(id, `Hello ${first_name} ${last_name}`, typing)
+    bp.messenger.sendText(id, `Hello, ${first_name}!`).then(Promise.delay(1000))
+    .then(() => {
+      bp.messenger.sendText(id, 'Check out my home page').then(() => {
+        bp.messenger.sendTemplate(id, greetingTemplate)
+      })
+    })
+
 
   })
 
-  // // Listens for a first message (this is a Regex)
-  // // GET_STARTED is the first message you get on Facebook Messenger
-  // bp.hear(/GET_STARTED|hello|hi|test|hey|holla/i, (event, next) => {
-  //   event.reply('#welcome') // See the file `content.yml` to see the block
-  // })
-  //
-  // // You can also pass a matcher object to better filter events
-  // bp.hear({
-  //   type: /message|text/i,
-  //   text: /exit|bye|goodbye|quit|done|leave|stop/i
-  // }, (event, next) => {
-  //   event.reply('#goodbye', {
-  //     // You can pass data to the UMM bloc!
-  //     reason: 'unknown'
-  //   })
-  // })
 
-  // bp.hear({
-  //     type: 'message',
-  //     text: /.+/
-  //   }, event => {
-  //     bp.messenger.sendText(event.user.id, event.text + " is no good")
-  // })
-  // bp.hear(/hello|hi|test|hey|yo|sup|good|holla|hola|buenos|buenas/i, (event, next) => {
-  //   const first_name = event.user.first_name
-
-    // bp.messenger.sendText(event.user.id, `Hello ${first_name}`, {typing: true})
-  //   bp.messenger.sendText(event.user.id, '#welcome')
-  // })
-
-  // bp.hear({
-  //   type: 'message',
-  //   text: /hi|hello|hey|greeting|yo|good|bueno|buena|guten|sup|what's up/i
-  // }, (event) => {
-  //   const first_name = event.user.first_name;
-  //   bp.messenger.sendText(event.user.id, `Hello ${first_name} ;)`, {typing: true});
-  // });
-  //
-  // bp.hear({
-  //   type: 'message',
-  //   text: /fuck/i
-  // }, (event) => {
-  //   bp.messenger.sendText(event.user.id, "hello world? the world is a cruel place :(");
-  // });
-  //
-  // bp.hear({
-  //   type: 'message',
-  //   text: /weather/i
-  // }, (event) => {
-  //   bp.messenger.sendText(event.user.id, "the weather is pretty nice by you");
-  // })
 
 
 }
