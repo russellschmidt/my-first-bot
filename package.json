@@ -6,7 +6,8 @@
   "dependencies": {
     "botpress": "0.x",
     "botpress-messenger": "^2.1.3",
-    "botpress-web": "1.x"
+    "botpress-web": "1.x",
+    "lodash": "^4.17.4"
   },
   "scripts": {
     "start": "botpress start",
