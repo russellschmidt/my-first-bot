@@ -6,4 +6,4 @@ const utterances = {
   greeting: /good morning|good afternoon|good evening/i
 }
 
-modules.export = utterances
+module.exports = utterances

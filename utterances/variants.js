@@ -15,11 +15,11 @@ const variants = {
     ':/',
     ':(',
     'Sorry to hear that',
-    'Hope we are not enemigos but remain amigos por vida which means forever in my country',
+    'Hope we are not enemigos but instead remain amigos por vida',
     'I don\'t believe it!',
     'OK',
     'Back to the drawing board'
   ])
 }
 
-modules.export = variants
+module.exports = variants
