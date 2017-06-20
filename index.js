@@ -197,7 +197,7 @@ module.exports = function(bp) {
         convo && convo.stop('aborted')
       })
 
-      bp.hear(/?/, (event, next) => {
+      bp.hear(/\?/, (event, next) => {
         const convo = bp.convo.find(event)
         convo && convo.stop('questioned')
       })
