@@ -1,8 +1,9 @@
 const Promise = require('bluebird')
-const greetingTemplate = require('./templates/greetingTemplate')
+// const greetingTemplate = require('./templates/greetingTemplate')
 const utterances = require('./utterances/utterances')
-const variants = require('./utterances/variants')
-const {quick_replies, topic_replies} = require('./utterances/quickReplies')
+// const variants = require('./utterances/variants')
+// const quickReplies = require('./utterances/quickReplies')
+// const topicReplies = require('./utterances/topicReplies')
 
 module.exports = function(bp) {
   bp.middlewares.load()
@@ -12,23 +13,31 @@ module.exports = function(bp) {
     platform: 'facebook',
     text: utterances.hello
   }, (event, next) => {
+    bp.messenger.createText(event.user.id, 'test test', {typing: 500})
+  })
+
+  bp.hear({
+    type: 'message',
+    platform: 'facebook',
+    text: utterances.hello
+  }, (event, next) => {
     const {id, first_name, last_name} = event.user
     const txt = text => bp.messenger.createText(id, text, {typing: 500})
-    const templateMessage = template => bp.messenger.sendTemplate(id, template, {typing: 1000} )
+    const templateMessage = template => bp.messenger.sendTemplate(id, template, {typing: 1000})
     const quick = (message, quick_reply) => bp.messenger.createText(id, message, quick_reply, {typing: 500})
     const imageMessage = img => bp.messenger.createAttachment(id, 'image', img, {typing: 1000})
+
     bp.convo.start(event, convo => {
 
       convo.messageTypes = ['message', 'postback', 'quick_reply', 'text']
 
       convo.threads['default'].addMessage(txt(`Hello ${first_name}`))
       convo.threads['default'].addMessage(txt(`I'm a gosh dang robot.`))
-      convo.threads['default'].addQuestion(txt('What would you like to talk about?', topic_replies) [
+      convo.threads['default'].addQuestion(txt('What would you like to talk about?', topicReplies) [
         {
           pattern: utterances.mood,
           callback: () => {
             convo.say(txt(variants.option_mood()))
-            convo.say(templateMessage(greetingTemplate))
             convo.switchTo('chitchat')
           }
         },
@@ -49,7 +58,7 @@ module.exports = function(bp) {
         {
           default: true,
           callback: () => {
-            convo.say(txt('Me no understand :-/ '))
+            convo.say(txt('Not Sure I understand. We can try again :-/ '))
             convo.say(imageMessage('https://media.tenor.com/images/dc8da26e465a52560873633e5f1883d0/tenor.gif'))
             convo.repeat()
           }
@@ -83,7 +92,7 @@ module.exports = function(bp) {
       ])
 
       convo.createThread('learnMoreAboutRuss')
-      convo.threads['learnMoreAboutRuss'].addQuestion(quick('Want to see my maker\'s home page?', quick_replies), [
+      convo.threads['learnMoreAboutRuss'].addQuestion(quick('Want to see my maker\'s home page?', quickReplies), [
         {
           pattern: utterances.yes,
           callback: () => {
@@ -222,17 +231,19 @@ module.exports = function(bp) {
       convo.createThread('dogs')
       convo.threads['dogs'].addQuestion(txt("Wanna see doggos? They melt frozen hearts."), [
         {
-          pattern: utterances.goodDescriptors,
+          pattern: utterances.yes,
           callback: () => {
             convo.say(txt("i will show you the doggos"))
             //  show doggo images
+            convo.say(txt('doggo emoji'))
           }
         },
         {
-          pattern: utterances.badDescriptors,
+          pattern: utterances.no,
           callback: () => {
             convo.say(txt("I dont care I am showing you them anyway."))
             //  show doggo images
+            convo.say(txt('doggo emoji'))
           }
         },
         {
@@ -248,10 +259,6 @@ module.exports = function(bp) {
       convo.on('questioned', () => {
         convo.say(txt("look "+first_name+" I'm asking the questions here"))
         convo.switchTo('default')
-      })
-
-      convo.on('done', () => {
-        convo.say(txt('okee dokey we are all done now I guess.'))
       })
 
       convo.on('aborted', () => {
