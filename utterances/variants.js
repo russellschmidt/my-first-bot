@@ -48,7 +48,35 @@ const variants = {
     "turtle videos",
     "maybe checkout Reddit, there are funny pages there",
     "definitely dont log onto facebook, the people you loathe are thriving"
-  ])
+  ]),
+  option_mood: () => _.sample([
+    "Ok we can talk about you",
+    "Everyone likes to talk about themselves",
+    "I am a licensed therapyBot 3000 ready to get into your trauma pants",
+    "THERAPYBOT 3000 ENGAGED",
+    "Very telling.",
+    "interdasting",
+    "moods are a thing for cattle and love play"
+  ]),
+  option_creator: () => _.sample([
+    "My lord and savior, He made me",
+    "You can venmo my creator money if you want but He really likes sacrificed animals",
+    "Praise Be",
+    "Under his Eye",
+    "Blessed Be the Fruit",
+    "Inshallah",
+    "Ojala que te amor",
+    "Plug your soul into my USB hole",
+    "My Maker says a stork made me, a giant stork who said all the right things",
+    "Maker says everyone should know about him"
+  ]),
+  option_dog: () => _.sample([
+    "Dogs are pretty great, if you like smelly toddlers",
+    "Dogs are both pet and food",
+    "Puppies are cute so you dont strangle them",
+    "Pet the dog and dog is a pet, English language I never will get :(",
+    "Dog pound gangster"
+  ]),
 }
 
 module.exports = variants

@@ -7,7 +7,10 @@ const utterances = {
   feelsGood: /good|fine|nice|sweet|hanging in there|chillin|chilling|happy|great|ok|alright|all right|love|gr8/i,
   feelsBad: /bad|terrible|not good|not great|meh|depressed|sad|upset|mad|angry|furious|frustrated|hate/i,
   goodDescriptors: /good|nice|lovely|friendly|love|care very much for|deep affection|hold dear|adore|think the world of|be devoted to|dote on|idolize|worship|be in love with|be infatuated with|be smitten with|be besotted with|mad|crazy about|wild about|have a crush on/i,
-  badDescriptors: /bad|hate|dislike|loathe|detest|despise|dislike|abhor|execrate|repulsed|repelled|unable to bear|stand|intolerable|recoil from|shrink from/i
+  badDescriptors: /bad|hate|dislike|loathe|detest|despise|dislike|abhor|execrate|repulsed|repelled|unable to bear|stand|intolerable|recoil from|shrink from/i,
+  mood: /mood|emotion|me/i,
+  creator: /creator|god|jesus|allah|yahweh/i,
+  dog: /dog|doggo/i
 }
 
 module.exports = utterances

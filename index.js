@@ -2,7 +2,7 @@ const Promise = require('bluebird')
 const greetingTemplate = require('./templates/greetingTemplate')
 const utterances = require('./utterances/utterances')
 const variants = require('./utterances/variants')
-const quickReplies = require('./utterances/quickReplies')
+const {quick_replies, topic_replies} = require('./utterances/quickReplies')
 
 module.exports = function(bp) {
   bp.middlewares.load()
@@ -13,21 +13,55 @@ module.exports = function(bp) {
     text: utterances.hello
   }, (event, next) => {
     const {id, first_name, last_name} = event.user
-    const txt = text => bp.messenger.createText(id, text, {typing: true})
+    const txt = text => bp.messenger.createText(id, text, {typing: 500})
     const templateMessage = template => bp.messenger.sendTemplate(id, template, {typing: 1000} )
-    const quick = (message, quick_reply) => bp.messenger.createText(id, message, quick_reply, {typing: true})
+    const quick = (message, quick_reply) => bp.messenger.createText(id, message, quick_reply, {typing: 500})
     const imageMessage = img => bp.messenger.createAttachment(id, 'image', img, {typing: 1000})
     bp.convo.start(event, convo => {
 
       convo.messageTypes = ['message', 'postback', 'quick_reply', 'text']
 
       convo.threads['default'].addMessage(txt(`Hello ${first_name}`))
-      convo.threads['default'].addQuestion(txt('Want to learn about my Lord and Creator, Russell Schmidt?'), [
+      convo.threads['default'].addMessage(txt(`I'm a gosh dang robot.`))
+      convo.threads['default'].addQuestion(txt('What would you like to talk about?', topic_replies) [
+        {
+          pattern: utterances.mood,
+          callback: () => {
+            convo.say(txt(variants.option_mood()))
+            convo.say(templateMessage(greetingTemplate))
+            convo.switchTo('chitchat')
+          }
+        },
+        {
+          pattern: utterances.creator,
+          callback: () => {
+            convo.say(txt(variants.option_creator()))
+            convo.switchTo('learnAboutRuss')
+          }
+        },
+        {
+          pattern: utterances.dog,
+          callback: () => {
+            convo.say(txt(variants.option_dog()))
+            convo.switchTo('dogs')
+          }
+        },
+        {
+          default: true,
+          callback: () => {
+            convo.say(txt('Me no understand :-/ '))
+            convo.say(imageMessage('https://media.tenor.com/images/dc8da26e465a52560873633e5f1883d0/tenor.gif'))
+            convo.repeat()
+          }
+        }
+      ])
+
+      convo.threads['learnAboutRuss'].addQuestion(txt('Want to learn about my Lord and Creator, Russell Schmidt?'), [
         {
           pattern: utterances.yes,
           callback: () => {
             convo.say(txt(variants.service_yes()))
-            convo.switchTo('learnMore')
+            convo.switchTo('learnMoreAboutRuss')
           }
         },
         {
@@ -48,8 +82,8 @@ module.exports = function(bp) {
         }
       ])
 
-      convo.createThread('learnMore')
-      convo.threads['learnMore'].addQuestion(quick('Want to see my maker\'s home page?', quickReplies), [
+      convo.createThread('learnMoreAboutRuss')
+      convo.threads['learnMoreAboutRuss'].addQuestion(quick('Want to see my maker\'s home page?', quick_replies), [
         {
           pattern: utterances.yes,
           callback: () => {
@@ -113,7 +147,9 @@ module.exports = function(bp) {
         {
           pattern: utterances.no,
           callback: () => {
-            convo.say(txt("Hmm"))
+            convo.say(txt("Hmmph phhhhhhh"))
+            convo.say(txt("Sorry. I farted."))
+            convo.say(txt("Hope thats cool with you"))
             convo.switchTo('therapyMother')
           }
         },
@@ -133,13 +169,15 @@ module.exports = function(bp) {
           pattern: utterances.goodDescriptors,
           callback: () => {
             convo.say(txt("Interesting. Many people feel this way about their mother"))
+            convo.say(txt("Delusion is widespread"))
             convo.switchTo('therapyFather')
           }
         },
         {
           pattern: utterances.badDescriptors,
           callback: () => {
-            convo.say(txt("Hmm. I understand having those feelings about your mother. You can't spell smother without mother"))
+            convo.say(txt("Wowza. I understand having those feelings about your mother. You can't spell smother without mother"))
+            convo.say(txt("But - time to grow up. Quit cryin"))
             convo.switchTo('therapyFather')
           }
         },
@@ -158,7 +196,8 @@ module.exports = function(bp) {
         {
           pattern: utterances.goodDescriptors,
           callback: () => {
-            convo.say(txt("That sounds like a more or less great dad."))
+            convo.say(txt("That sounds like a more or less great dad. Too bad he was not your biological dad :("))
+            convo.say(txt("Your real dad was a prisoner who was executed for butchering his real family as you well know"))
             convo.switchTo('chitchat')
           }
         },
@@ -166,6 +205,7 @@ module.exports = function(bp) {
           pattern: utterances.badDescriptors,
           callback: () => {
             convo.say(txt("Fathers can be confusing if they are there at all in a child's life."))
+            convo.say(txt("Founding Fathers more like founding milk men amirite they go out for smokes and never come back"))
             convo.switchTo('chitchat')
           }
         },
@@ -173,6 +213,32 @@ module.exports = function(bp) {
           default: true,
           callback: () => {
             convo.say(txt('Hmm. Not sure I understand that.'))
+            convo.say(imageMessage('https://media.tenor.com/images/dc8da26e465a52560873633e5f1883d0/tenor.gif'))
+            convo.repeat()
+          }
+        }
+      ])
+
+      convo.createThread('dogs')
+      convo.threads['dogs'].addQuestion(txt("Wanna see doggos? They melt frozen hearts."), [
+        {
+          pattern: utterances.goodDescriptors,
+          callback: () => {
+            convo.say(txt("i will show you the doggos"))
+            //  show doggo images
+          }
+        },
+        {
+          pattern: utterances.badDescriptors,
+          callback: () => {
+            convo.say(txt("I dont care I am showing you them anyway."))
+            //  show doggo images
+          }
+        },
+        {
+          default: true,
+          callback: () => {
+            convo.say(txt('Yes or No to doggo please.'))
             convo.say(imageMessage('https://media.tenor.com/images/dc8da26e465a52560873633e5f1883d0/tenor.gif'))
             convo.repeat()
           }
